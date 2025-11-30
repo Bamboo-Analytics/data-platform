@@ -336,6 +336,68 @@ class FundamentalFactorBuilder(BaseFinanceLoader):
         print(f"✓ Generated {len(df)} quarters of fundamental data")
         return df
 
+    def build_combined_factors(self, start_date: str = "2020-01-01") -> pd.DataFrame:
+        """
+        Build a combined dataframe with both quarterly and annual fundamental factors.
+        This creates a wide-format dataframe suitable for OLAP databases like ClickHouse.
+        
+        The dataframe will have quarterly data as rows, with columns prefixed as:
+        - 'quarterly_*' for quarterly metrics
+        - 'annual_*' for annual metrics
+        
+        Args:
+            start_date: Start date in 'YYYY-MM-DD' format to filter data (default: '2020-01-01')
+        
+        Returns:
+            DataFrame with combined quarterly and annual factors (column-major format)
+        """
+        print("\n" + "="*60)
+        print("Building COMBINED (Quarterly + Annual) factors...")
+        print("="*60)
+        
+        # Build quarterly factors
+        print("\n[1/2] Fetching quarterly data...")
+        quarterly_df = self.build_quarterly_factors(start_date=start_date)
+        
+        # Build annual factors
+        print("\n[2/2] Fetching annual data...")
+        # Calculate years_back from start_date
+        start_year = pd.Timestamp(start_date).year
+        current_year = pd.Timestamp.now().year
+        years_back = current_year - start_year + 1
+        annual_df = self.build_annual_factors(years_back=years_back)
+        
+        # Prefix column names
+        quarterly_df = quarterly_df.add_prefix('quarterly_')
+        annual_df = annual_df.add_prefix('annual_')
+        
+        # Rename index to avoid conflicts
+        quarterly_df.index.name = 'date'
+        annual_df.index.name = 'date'
+        
+        # For each quarterly date, find the corresponding annual data
+        # (use the most recent annual report available at that quarter end)
+        print("\n[3/3] Aligning annual data to quarterly dates...")
+        
+        # Create a mapping of quarterly dates to their corresponding annual values
+        aligned_annual_data = {}
+        for col in annual_df.columns:
+            aligned_annual_data[col] = align_to_dates(annual_df[col], quarterly_df.index)
+        
+        aligned_annual_df = pd.DataFrame(aligned_annual_data, index=quarterly_df.index)
+        
+        # Concatenate quarterly and annual data horizontally
+        combined_df = pd.concat([quarterly_df, aligned_annual_df], axis=1)
+        combined_df.index.name = 'fiscal_date'
+        
+        print(f"\n✓ Combined dataframe shape: {combined_df.shape}")
+        print(f"  - Quarterly columns: {len(quarterly_df.columns)}")
+        print(f"  - Annual columns: {len(aligned_annual_df.columns)}")
+        print(f"  - Total columns: {len(combined_df.columns)}")
+        print(f"  - Rows (quarterly periods): {len(combined_df)}")
+        
+        return combined_df
+
 
 # ---------- earnings-related helpers (use BaseFinanceLoader, not inheritance) ----------
 
