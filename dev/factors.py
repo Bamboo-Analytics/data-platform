@@ -162,6 +162,8 @@ class FundamentalFactorBuilder(BaseFinanceLoader):
                 0.6 * df["X4"] +
                 1.0 * df["X5"]
             )
+            # Drop intermediate X components after calculating Altman Z
+            df.drop(columns=["X1", "X2", "X3", "X4", "X5"], inplace=True)
         else:
             df["altman_z"] = pd.NA
 
@@ -330,6 +332,8 @@ class FundamentalFactorBuilder(BaseFinanceLoader):
                 0.6 * df["X4"] +
                 1.0 * df["X5"]
             )
+            # Drop intermediate X components after calculating Altman Z
+            df.drop(columns=["X1", "X2", "X3", "X4", "X5"], inplace=True)
         else:
             df["altman_z"] = pd.NA
 
