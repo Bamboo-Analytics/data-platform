@@ -1,0 +1,329 @@
+# Data Sources Configuration
+#
+# Defines all data sources, tickers, and features to ingest.
+
+# Daily refresh sources (updated every trading day)
+daily_sources:
+  # Equity indices
+  - name: "sp500"
+    vendor: "yahoo_finance"
+    asset_class: "equity_index"
+    ticker: "^GSPC"
+    symbol: "S&P 500"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  # Sector ETFs
+  - name: "xlk_tech"
+    vendor: "yahoo_finance"
+    asset_class: "equity_etf"
+    ticker: "XLK"
+    symbol: "Technology Select Sector SPDR"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "xlf_financials"
+    vendor: "yahoo_finance"
+    asset_class: "equity_etf"
+    ticker: "XLF"
+    symbol: "Financial Select Sector SPDR"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "xle_energy"
+    vendor: "yahoo_finance"
+    asset_class: "equity_etf"
+    ticker: "XLE"
+    symbol: "Energy Select Sector SPDR"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  # Commodities
+  - name: "wti_oil"
+    vendor: "yahoo_finance"
+    asset_class: "commodity"
+    ticker: "CL=F"
+    symbol: "WTI Crude Oil"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "gold"
+    vendor: "yahoo_finance"
+    asset_class: "commodity"
+    ticker: "GC=F"
+    symbol: "Gold"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  # Cryptocurrency
+  - name: "bitcoin"
+    vendor: "yahoo_finance"
+    asset_class: "cryptocurrency"
+    ticker: "BTC-USD"
+    symbol: "Bitcoin"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+      - correlation_30d
+    config:
+      correlation_ticker: "^GSPC"
+      correlation_window: 30
+    enabled: true
+
+  # USD Index
+  - name: "dxy"
+    vendor: "yahoo_finance"
+    asset_class: "fx_index"
+    ticker: "DX-Y.NYB"
+    symbol: "US Dollar Index"
+    currency: null
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  # FX Pairs
+  - name: "eurusd"
+    vendor: "yahoo_finance"
+    asset_class: "fx"
+    ticker: "EURUSD=X"
+    symbol: "EUR/USD"
+    currency: null
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "usdjpy"
+    vendor: "yahoo_finance"
+    asset_class: "fx"
+    ticker: "USDJPY=X"
+    symbol: "USD/JPY"
+    currency: null
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "usdcnh"
+    vendor: "yahoo_finance"
+    asset_class: "fx"
+    ticker: "USDCNH=X"
+    symbol: "USD/CNH"
+    currency: null
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "gbpusd"
+    vendor: "yahoo_finance"
+    asset_class: "fx"
+    ticker: "GBPUSD=X"
+    symbol: "GBP/USD"
+    currency: null
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  # Treasury Yields
+  - name: "treasury_3m"
+    vendor: "yahoo_finance"
+    asset_class: "fixed_income"
+    ticker: "^IRX"
+    symbol: "3-Month Treasury Yield"
+    currency: null
+    features:
+      - yield_value
+    enabled: true
+
+  - name: "treasury_10y"
+    vendor: "yahoo_finance"
+    asset_class: "fixed_income"
+    ticker: "^TNX"
+    symbol: "10-Year Treasury Yield"
+    currency: null
+    features:
+      - yield_value
+    enabled: true
+
+  # Credit ETFs
+  - name: "hyg_high_yield"
+    vendor: "yahoo_finance"
+    asset_class: "credit"
+    ticker: "HYG"
+    symbol: "iShares High Yield Corporate Bond"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+  - name: "lqd_investment_grade"
+    vendor: "yahoo_finance"
+    asset_class: "credit"
+    ticker: "LQD"
+    symbol: "iShares Investment Grade Corporate Bond"
+    currency: "USD"
+    features:
+      - close_price
+      - daily_return
+    enabled: true
+
+# Quarterly refresh sources (fundamentals, reference data)
+quarterly_sources: []
+
+# Alternative data sources (sentiment, volatility, on-chain metrics)
+# Note: These are placeholder configurations - actual APIs require credentials
+alternative_sources:
+  # Volatility indices
+  - name: "vix"
+    vendor: "yahoo_finance"
+    asset_class: "volatility"
+    ticker: "^VIX"
+    symbol: "VIX"
+    currency: null
+    features:
+      - volatility_index
+    enabled: true
+
+  # Sentiment indices (placeholder - actual implementation requires API keys)
+  - name: "fear_greed_sp500"
+    vendor: "fear_greed"
+    asset_class: "alternative"
+    ticker: "FEAR_GREED"
+    symbol: "CNN Fear & Greed Index"
+    currency: null
+    features:
+      - fear_greed_index
+    enabled: false
+    notes: "Requires web scraping or API access"
+
+  - name: "crypto_fear_greed"
+    vendor: "alternative_me"
+    asset_class: "alternative"
+    ticker: "CRYPTO_FG"
+    symbol: "Crypto Fear & Greed"
+    currency: null
+    features:
+      - fear_greed_index
+    enabled: false
+    notes: "API: https://api.alternative.me/fng/"
+
+  # On-chain metrics (placeholder - requires Glassnode/CoinMetrics API)
+  - name: "btc_active_addresses"
+    vendor: "glassnode"
+    asset_class: "cryptocurrency"
+    ticker: "BTC"
+    symbol: "Bitcoin Active Addresses"
+    currency: null
+    features:
+      - active_addresses
+    enabled: false
+    notes: "Requires Glassnode API key"
+
+  - name: "btc_hash_rate"
+    vendor: "glassnode"
+    asset_class: "cryptocurrency"
+    ticker: "BTC"
+    symbol: "Bitcoin Hash Rate"
+    currency: null
+    features:
+      - hash_rate
+    enabled: false
+    notes: "Requires Glassnode API key"
+
+  # Social sentiment (placeholder - requires Twitter/Reddit API)
+  - name: "btc_twitter_sentiment"
+    vendor: "twitter_api"
+    asset_class: "alternative"
+    ticker: "BTC"
+    symbol: "Bitcoin Twitter Sentiment"
+    currency: null
+    features:
+      - sentiment_score
+      - social_volume
+    enabled: false
+    notes: "Requires Twitter API v2 credentials"
+
+  # Google Trends (placeholder - requires pytrends library)
+  - name: "bitcoin_search"
+    vendor: "google_trends"
+    asset_class: "alternative"
+    ticker: "BITCOIN"
+    symbol: "Bitcoin Search Interest"
+    currency: null
+    features:
+      - search_interest
+    enabled: false
+    notes: "Uses pytrends library"
+
+  # Macro indicators from FRED (placeholder)
+  - name: "us_unemployment"
+    vendor: "fred"
+    asset_class: "macro_indicator"
+    ticker: "UNRATE"
+    symbol: "US Unemployment Rate"
+    currency: null
+    features:
+      - unemployment_rate
+    enabled: false
+    notes: "Requires FRED API key"
+
+  - name: "us_cpi"
+    vendor: "fred"
+    asset_class: "macro_indicator"
+    ticker: "CPIAUCSL"
+    symbol: "US CPI"
+    currency: null
+    features:
+      - inflation_rate
+    enabled: false
+    notes: "Requires FRED API key"
+
+  - name: "fed_funds_rate"
+    vendor: "fred"
+    asset_class: "macro_indicator"
+    ticker: "FEDFUNDS"
+    symbol: "Federal Funds Rate"
+    currency: null
+    features:
+      - interest_rate
+    enabled: false
+    notes: "Requires FRED API key"
+
+# Pipeline settings
+pipeline:
+  batch_size: 1000
+  max_retries: 3
+  retry_delay_seconds: 5
+  backoff_multiplier: 2.0
+  max_null_rate: 0.3
+  check_outliers: true
+  z_score_threshold: 5.0
+
+# ClickHouse settings
+clickhouse:
+  daily_table: "daily_features"
+  quarterly_table: "quarterly_features"
+  batch_insert_size: 10000
