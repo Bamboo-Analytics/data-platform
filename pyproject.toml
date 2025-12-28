@@ -1,10 +1,16 @@
 [project]
 name = "data-platform"
 version = "0.1.0"
-description = "Add your description here"
+description = "Financial Data Platform for ingesting and processing market data"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic>=2.12.5",
+    "yfinance>=0.2.48",
+    "boto3>=1.35.0",
+    "pandas>=2.2.0",
+    "pyarrow>=18.0.0",
+]
 
 [tool.uv]
 package=true
