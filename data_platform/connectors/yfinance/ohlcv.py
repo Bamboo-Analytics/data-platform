@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 import yfinance as yf
 import pandas as pd
-from data_platform.ingestion.connectors.yfinance.models import (
+from data_platform.core.s
     YFinanceOHLCV,
     YFinanceInfo,
     YFinanceDividend,

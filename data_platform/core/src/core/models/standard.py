@@ -1,10 +1,11 @@
 """Standard platform data models that all APIs map to."""
 from datetime import datetime
 from typing import Optional
+from abstract import StandardizedData
 from pydantic import BaseModel, Field
 
 
-class OHLCV(BaseModel):
+class OHLCV(StandardizedData):
     """
     Standardized OHLCV (Open, High, Low, Close, Volume) model.
     All API connectors must transform their data to this format.
