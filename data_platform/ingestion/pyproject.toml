@@ -1,0 +1,15 @@
+[project]
+name = "ingestion"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.42.49",
+    "pandas>=2.2.0",
+    "yfinance>=0.2.50",
+    "python-dotenv>=1.0.0",
+    "pyarrow>=18.0.0",
+    "dotenv>=0.9.9",
+    "pip>=26.0.1",
+]
